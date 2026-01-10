@@ -1,6 +1,6 @@
 import 'package:apex/utils/helpers/snackbar.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart'; // Optional: for actual calling
+import 'package:url_launcher/url_launcher.dart';
 
 class DriverDetailsController extends GetxController {
   // Mock Data (In a real app, this would come from an API)

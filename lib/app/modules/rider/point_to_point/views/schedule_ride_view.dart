@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:apex/common/widgets/forms/route_input_fields.dart';
 import 'package:apex/common/widgets/ride/fare_breakdown_row.dart';
 import 'package:apex/common/widgets/navigation/back_button_header.dart';
+import '../../../../../common/widgets/navigation/custom_app_bar.dart';
 import '../../../../core/core.dart';
 import '../controllers/schedule_ride_controller.dart';
 
@@ -11,222 +13,213 @@ class ScheduleRideView extends GetView<ScheduleRideController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ScheduleRideController());
 
-    // --- Colors ---
-    const Color mainBgColor = Color(0xFF0B0B0C);
-    const Color cardBg = Color(0xFF1F1F1F); // New Card Background Color
-    const Color primaryGold = Color(0xFFCFA854);
-    const Color inputBorder = Color(0xFFCFA854);
-    const Color textWhite = Colors.white;
-    final Color buttonBg = R.theme.cardBg;
-
-    const TextStyle labelStyle = TextStyle(
-      color: textWhite,
+    final TextStyle labelStyle = TextStyle(
+      color: R.theme.white,
       fontSize: 14,
       fontWeight: FontWeight.w600,
       fontFamily: 'Urbanist',
     );
 
-    return Scaffold(
-      backgroundColor: mainBgColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              // --- Header ---
-              BackButtonHeader(title: "Schedule Ride", buttonBg: buttonBg),
-              const SizedBox(height: 30),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: R.theme.darkBackground,
+        appBar: CustomAppBar(title: 'Schedule Ride'),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-              // --- Route Inputs ---
-              RouteInputFields(
-                pickupController: controller.pickupController,
-                dropoffController: controller.destController,
-                pickupHint: "Choose pick up point",
-                dropoffHint: "Choose your destination",
-                pickupColor: Colors.redAccent,
-                dropoffColor: const Color(0xFF27AE60),
-                borderColor: inputBorder,
-              ),
-
-              const SizedBox(height: 20),
-
-              // --- Stops ---
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("Add Stops (Optional)", style: labelStyle),
-                  TextButton.icon(
-                    onPressed: controller.addStop,
-                    icon: const Icon(Icons.add, color: textWhite, size: 16),
-                    label: const Text(
-                      "Add Stop",
-                      style: TextStyle(color: textWhite),
-                    ),
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  ),
-                ],
-              ),
-              _buildSimpleInput(
-                "Stop 1",
-                controller.stopController,
-                inputBorder,
-              ),
-
-              const SizedBox(height: 20),
-
-              // --- Date & Time ---
-              const Text("Select Date", style: labelStyle),
-              const SizedBox(height: 8),
-              InkWell(
-                onTap: () => controller.pickDate(context),
-                child: _buildIconInput(
-                  controller.dateController,
-                  Icons.calendar_today_outlined,
-                  inputBorder,
-                  enabled: false,
+                // --- Route Inputs ---
+                RouteInputFields(
+                  pickupController: controller.pickupController,
+                  dropoffController: controller.destController,
+                  pickupHint: "Choose pick up point",
+                  dropoffHint: "Choose your destination",
+                  pickupColor: Colors.redAccent,
+                  dropoffColor: const Color(0xFF27AE60),
+                  borderColor: R.theme.secondary,
                 ),
-              ),
-              const SizedBox(height: 20),
 
-              const Text("Select Time", style: labelStyle),
-              const SizedBox(height: 8),
-              InkWell(
-                onTap: () => controller.pickTime(context),
-                child: _buildIconInput(
-                  controller.timeController,
-                  Icons.access_time,
-                  inputBorder,
-                  enabled: false,
-                ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              // --- Window ---
-              const Text("Pickup Window", style: labelStyle),
-              const SizedBox(height: 8),
-              Container(
-                height: 56,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: inputBorder),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Row(
+                // --- Stops ---
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text("5 min", style: TextStyle(color: Colors.white)),
-                    Icon(Icons.arrow_drop_down, color: primaryGold),
+                  children: [
+                    Text("Add Stops (Optional)", style: labelStyle),
+                    TextButton.icon(
+                      onPressed: controller.addStop,
+                      icon: Icon(Icons.add, color: R.theme.white, size: 16),
+                      label: Text(
+                        "Add Stop",
+                        style: TextStyle(color: R.theme.white),
+                      ),
+                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 20),
+                _buildSimpleInput(
+                  "Stop 1",
+                  controller.stopController,
+                  R.theme.secondary,
+                ),
 
-              // --- Note ---
-              const Text("Note for Driver (Optional)", style: labelStyle),
-              const SizedBox(height: 8),
-              _buildSimpleInput(
-                "Anything you want to say to driver...",
-                controller.noteController,
-                inputBorder,
-              ),
+                const SizedBox(height: 20),
 
-              const SizedBox(height: 20),
-
-              // --- CONDITIONAL FARE BREAKDOWN (UPDATED WITH BACKGROUND) ---
-              Obx(() {
-                if (!controller.isFareCalculated.value)
-                  return const SizedBox.shrink();
-
-                return Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 20),
-                  padding: const EdgeInsets.all(20), // Padding inside the card
-                  decoration: BoxDecoration(
-                    color: cardBg, // Dark Grey Background
-                    borderRadius: BorderRadius.circular(16),
+                // --- Date & Time ---
+                Text("Select Date", style: labelStyle),
+                const SizedBox(height: 8),
+                InkWell(
+                  onTap: () => controller.pickDate(context),
+                  child: _buildIconInput(
+                    controller.dateController,
+                    Icons.calendar_today_outlined,
+                    R.theme.secondary,
+                    enabled: false,
                   ),
-                  child: Column(
+                ),
+                const SizedBox(height: 20),
+
+                Text("Select Time", style: labelStyle),
+                const SizedBox(height: 8),
+                InkWell(
+                  onTap: () => controller.pickTime(context),
+                  child: _buildIconInput(
+                    controller.timeController,
+                    Icons.access_time,
+                    R.theme.secondary,
+                    enabled: false,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // --- Window ---
+                Text("Pickup Window", style: labelStyle),
+                const SizedBox(height: 8),
+                Container(
+                  height: 56,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: R.theme.secondary),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FareBreakdownRow(
-                        label: "Travel time",
-                        value: "~44min.",
-                        labelColor: Colors.grey,
-                        valueColor: primaryGold,
-                      ),
-                      FareBreakdownRow(
-                        label: "Base fare",
-                        value: "\$9,00",
-                        labelColor: Colors.grey,
-                        valueColor: primaryGold,
-                      ),
-                      FareBreakdownRow(
-                        label: "Distance fare",
-                        value: "\$9,00",
-                        labelColor: Colors.grey,
-                        valueColor: primaryGold,
-                      ),
-                      FareBreakdownRow(
-                        label: "Time fare",
-                        value: "\$9,00",
-                        labelColor: Colors.grey,
-                        valueColor: primaryGold,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Divider(color: Colors.grey, thickness: 0.2),
-                      ),
-                      FareBreakdownRow(
-                        label: "Total Estimate",
-                        value: "\$20,00",
-                        labelColor: Colors.white,
-                        valueColor: primaryGold,
-                        isTotal: true,
-                      ),
+                      const Text("5 min", style: TextStyle(color: Colors.white)),
+                      Icon(Icons.arrow_drop_down, color: R.theme.secondary),
                     ],
                   ),
-                );
-              }),
+                ),
+                const SizedBox(height: 20),
 
-              // --- ACTION BUTTON ---
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: Obx(
-                  () => ElevatedButton(
-                    onPressed: controller.onMainButtonClick,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryGold,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                // --- Note ---
+                Text("Note for Driver (Optional)", style: labelStyle),
+                const SizedBox(height: 8),
+                _buildSimpleInput(
+                  "Anything you want to say to driver...",
+                  controller.noteController,
+                  R.theme.secondary,
+                ),
+
+                const SizedBox(height: 20),
+
+                Obx(() {
+                  if (!controller.isFareCalculated.value)
+                    return const SizedBox.shrink();
+
+                  return Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: R.theme.cardBg,
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Text(
-                      controller.isFareCalculated.value
-                          ? "Find Driver"
-                          : "Calculate Fare",
-                      style: const TextStyle(
-                        color: Colors.white, // White text on gold button
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Urbanist',
+                    child: Column(
+                      children: [
+                        FareBreakdownRow(
+                          label: "Travel time",
+                          value: "~44min.",
+                          labelColor: Colors.grey,
+                          valueColor: R.theme.secondary,
+                        ),
+                        FareBreakdownRow(
+                          label: "Base fare",
+                          value: "\$9,00",
+                          labelColor: Colors.grey,
+                          valueColor: R.theme.secondary,
+                        ),
+                        FareBreakdownRow(
+                          label: "Distance fare",
+                          value: "\$9,00",
+                          labelColor: Colors.grey,
+                          valueColor: R.theme.secondary,
+                        ),
+                        FareBreakdownRow(
+                          label: "Time fare",
+                          value: "\$9,00",
+                          labelColor: Colors.grey,
+                          valueColor: R.theme.secondary,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: Divider(color: Colors.grey, thickness: 0.2),
+                        ),
+                        FareBreakdownRow(
+                          label: "Total Estimate",
+                          value: "\$20,00",
+                          labelColor: Colors.white,
+                          valueColor: R.theme.secondary,
+                          isTotal: true,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: Obx(
+                    () => ElevatedButton(
+                      onPressed: controller.onMainButtonClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: R.theme.secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Text(
+                        controller.isFareCalculated.value
+                            ? "Find Driver"
+                            : "Calculate Fare",
+                        style: const TextStyle(
+                          color: Colors.white, // White text on gold button
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Urbanist',
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 40),
-            ],
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  // --- Helper Widgets ---
 
   Widget _buildSimpleInput(
     String hint,

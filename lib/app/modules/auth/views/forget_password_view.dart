@@ -1,5 +1,4 @@
 import 'package:apex/common/widgets/build_image.dart';
-import 'package:apex/common/widgets/my_text_form_field.dart';
 import 'package:apex/common/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../../common/widgets/my_text.dart';
 import '../../../core/core.dart';
 import '../controllers/forgot_password_controller.dart';
+import '../../../../common/widgets/field_error.dart';
 
 class ForgotPasswordView extends GetView<ForgotPasswordController> {
   const ForgotPasswordView({Key? key}) : super(key: key);
@@ -20,11 +20,12 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
         statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: R.theme.darkBackground,
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Back Button
               Padding(
                 padding: const EdgeInsets.only(left: 24, top: 24, bottom: 16),
                 child: GestureDetector(
@@ -34,7 +35,12 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                     children: [
                       const Icon(Icons.chevron_left, color: Colors.white, size: 24),
                       8.sbw,
-                      MyText(text: "Back", color: Colors.white, fontSize: 16, textAlign: TextAlign.start),
+                      MyText(
+                          text: "Back",
+                          color: Colors.white,
+                          fontSize: 16,
+                          textAlign: TextAlign.start
+                      ),
                     ],
                   ),
                 ),
@@ -51,8 +57,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                       buildImage('assets/images/brand.png', context: context),
                       24.sbh,
                       MyText(
-                        text:
-                            "Forgot Password!",
+                        text: "Forgot Password!",
                         textAlign: TextAlign.center,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -60,37 +65,65 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                       ),
                       8.sbh,
                       MyText(
-                        text:
-                            "Not a problem! Please enter your email address to change your password.", // Make dynamic via localization
+                        text: "Not a problem! Please enter your email address to change your password.",
                         textAlign: TextAlign.center,
                         fontSize: 14,
                         color: Colors.grey[400],
                         height: 1.5,
                         softWrap: true,
                       ),
+
                       40.sbh,
+
                       Align(
                         alignment: Alignment.centerLeft,
                         child: MyText(
-                          text:
-                              "Email Address",
+                          text: "Email Address",
                           textAlign: TextAlign.start,
                           color: R.theme.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
+
                       10.sbh,
-                      MyTextFormField(
+
+                      // --- START: Updated Field Style ---
+                      Obx(() => TextField(
                         controller: controller.emailController,
-                        hinttxt: "your email address",
-                        onChange: (_) => controller.emailError.value =
-                            false,
-                      ),
+                        style: TextStyle(color: R.theme.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          hintText: "your email address",
+                          hintStyle: TextStyle(color: Colors.grey[600]),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                                color: controller.emailError.value
+                                    ? Colors.red
+                                    : R.theme.white
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: R.theme.secondary),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 13, vertical: 14),
+                        ),
+                        onChanged: (_) => controller.emailError.value = false,
+                      )),
+
+                      // Error Message Widget
+                      Obx(() => controller.emailError.value
+                          ? FieldError(message: "Please enter a valid email address")
+                          : const SizedBox.shrink()),
+                      // --- END: Updated Field Style ---
+
                       102.sbh,
+
                       PrimaryButton(
-                        text:
-                            "Send verification Link",
+                        text: "Send verification Link",
                         onPressed: controller.handleSendLink,
                         color: R.theme.goldAccent,
                       ),

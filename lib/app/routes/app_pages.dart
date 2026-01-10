@@ -1,5 +1,8 @@
+import 'package:apex/app/modules/rider/point_to_point/bindings/add_label_binding.dart';
+import 'package:apex/app/modules/rider/point_to_point/bindings/ride_selection_binding.dart';
+import 'package:apex/app/modules/rider/point_to_point/views/add_label_view.dart';
+import 'package:apex/app/modules/rider/point_to_point/views/ride_selection_view.dart';
 import 'package:get/get.dart';
-
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/forget_password_view.dart';
 import '../modules/auth/views/login_view.dart';
@@ -23,7 +26,9 @@ import '../modules/rider/home/views/home_view.dart';
 import '../modules/rider/hourly_reservation/bindings/hourly_reservation_binding.dart';
 import '../modules/rider/hourly_reservation/views/hourly_reservation_view.dart';
 import '../modules/rider/point_to_point/bindings/point_to_point_binding.dart';
+import '../modules/rider/point_to_point/bindings/schedule_ride_binding.dart';
 import '../modules/rider/point_to_point/views/point_to_point_view.dart';
+import '../modules/rider/point_to_point/views/schedule_ride_view.dart';
 import '../modules/rider/rate_driver/bindings/rate_driver_binding.dart';
 import '../modules/rider/rate_driver/views/rate_driver_view.dart';
 import '../modules/rider/receipt/bindings/receipt_binding.dart';
@@ -66,7 +71,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.MAIN;
+  static const INITIAL = Routes.ONBOARDING;
 
   static final routes = [
     GetPage(
@@ -94,7 +99,11 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: AuthBinding(),
     ),
-    GetPage(name: _Paths.OTP, page: () => OtpView(), binding: AuthBinding()),
+    GetPage(
+        name: _Paths.OTP,
+        page: () => OtpView(),
+        binding: AuthBinding()
+    ),
     GetPage(
       name: _Paths.MAIN,
       page: () => MainView(),
@@ -177,7 +186,11 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(name: _Paths.HOME, page: () => HomeView(), binding: HomeBinding()),
+    GetPage(
+        name: _Paths.HOME,
+        page: () => HomeView(),
+        binding: HomeBinding()
+    ),
     GetPage(
       name: _Paths.ADD_FUEL_LOG,
       page: () => AddFuelLogView(),
@@ -197,6 +210,11 @@ class AppPages {
       name: _Paths.RIDE_INFO,
       page: () => const RideInfoView(),
       binding: RideInfoBinding(),
+    ),
+    GetPage(
+      name: _Paths.RIDE_SELECTION,
+      page: () => const RideSelectionView(),
+      binding: RideSelectionBinding(),
     ),
     GetPage(
       name: _Paths.ACTIVE_RIDE,
@@ -222,6 +240,16 @@ class AppPages {
       name: _Paths.DURING_RIDE,
       page: () => const DuringRideView(),
       binding: DuringRideBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_LABEL,
+      page: () => const AddLabelView(),
+      binding: AddLabelBinding(),
+    ),
+    GetPage(
+      name: _Paths.SCHEDULE_RIDE,
+      page: () => const ScheduleRideView(),
+      binding: ScheduleRideBinding(),
     ),
   ];
 }

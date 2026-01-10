@@ -1,5 +1,6 @@
 import 'package:apex/app/modules/rider/drivers_list/views/drivers_list_view.dart';
 import 'package:apex/app/data/models/ride_booking_data.dart';
+import 'package:apex/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -80,7 +81,7 @@ class RideSelectionController extends GetxController {
       estimatedDistance: "8.5 km",
     );
 
-    Get.to(() => DriversListView(), arguments: bookingData);
+    Get.toNamed(Routes.DRIVERS_LIST, arguments: bookingData);
   }
 
   String getVehicleName(int index) {

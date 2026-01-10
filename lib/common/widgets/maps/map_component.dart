@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+import '../../../app/core/core.dart';
 
-/// Reusable map component (FlutterMap setup)
-/// Used in: point_to_point_view, ride_selection_view, ride_booked_view
+/// A versatile and reusable map component built on top of FlutterMap.
 class MapComponent extends StatelessWidget {
   const MapComponent({
     Key? key,
@@ -13,9 +14,13 @@ class MapComponent extends StatelessWidget {
     this.tileLayerUrl,
     this.polylines = const [],
     this.markers = const [],
+    this.circles = const [],
     this.onMapReady,
+    this.onTap,
+    this.onPositionChanged,
     this.enableRotation = false,
     this.interactionFlags,
+    this.children = const [],
   }) : super(key: key);
 
   final MapController mapController;
@@ -24,15 +29,23 @@ class MapComponent extends StatelessWidget {
   final String? tileLayerUrl;
   final List<Polyline> polylines;
   final List<Marker> markers;
+  final List<CircleMarker> circles;
   final VoidCallback? onMapReady;
+  final void Function(TapPosition, LatLng)? onTap;
+  final void Function(MapPosition, bool)? onPositionChanged;
   final bool enableRotation;
   final int? interactionFlags;
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
-    final String defaultTileUrl =
+    // Automatically select tile URL based on theme brightness
+    final isDarkMode = Get.isDarkMode;
+    final defaultTileUrl =
         tileLayerUrl ??
-        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+        (isDarkMode
+            ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+            : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png');
 
     return FlutterMap(
       mapController: mapController,
@@ -46,7 +59,9 @@ class MapComponent extends StatelessWidget {
                   ? InteractiveFlag.all
                   : InteractiveFlag.all & ~InteractiveFlag.rotate),
         ),
-        onMapReady: onMapReady != null ? () => onMapReady!() : null,
+        onMapReady: onMapReady,
+        onTap: onTap,
+        onPositionChanged: onPositionChanged,
       ),
       children: [
         TileLayer(
@@ -55,7 +70,9 @@ class MapComponent extends StatelessWidget {
           userAgentPackageName: 'com.devitcity.apex',
         ),
         if (polylines.isNotEmpty) PolylineLayer(polylines: polylines),
+        if (circles.isNotEmpty) CircleLayer(circles: circles),
         if (markers.isNotEmpty) MarkerLayer(markers: markers),
+        ...children,
       ],
     );
   }
@@ -107,11 +124,13 @@ class MapPolylineHelper {
   /// Create a route polyline
   static Polyline routePolyline({
     required List<LatLng> points,
-    Color color = const Color(
-      0xFFCFA854,
-    ), // TODO: Should use R.theme.goldAccent but requires import
+    Color? color,
     double strokeWidth = 5.0,
   }) {
-    return Polyline(points: points, strokeWidth: strokeWidth, color: color);
+    return Polyline(
+      points: points,
+      strokeWidth: strokeWidth,
+      color: color ?? R.theme.primary,
+    );
   }
 }

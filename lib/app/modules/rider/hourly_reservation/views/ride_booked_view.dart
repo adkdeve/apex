@@ -12,11 +12,6 @@ class RideBookedView extends GetView<RideBookedController> {
   Widget build(BuildContext context) {
     Get.put(RideBookedController());
 
-    // Design Colors
-    const Color primaryGold = Color(0xFFCFA854);
-    const Color bgDark = Color(0xFF0B0B0C);
-    const Color textGrey = Colors.grey;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -66,7 +61,7 @@ class RideBookedView extends GetView<RideBookedController> {
             initialChildSize: 0.55,
             minChildSize: 0.40,
             maxChildSize: 0.85,
-            backgroundColor: bgDark,
+            backgroundColor: R.theme.darkBackground,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -96,7 +91,7 @@ class RideBookedView extends GetView<RideBookedController> {
                           const SizedBox(height: 4),
                           Text(
                             "Ben accepted your request...",
-                            style: TextStyle(color: textGrey, fontSize: 12),
+                            style: TextStyle(color: R.theme.grey, fontSize: 12),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -137,9 +132,9 @@ class RideBookedView extends GetView<RideBookedController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildCircleAction(Icons.phone, "Call driver", controller.onCallDriver, primaryGold),
-                    _buildCircleAction(Icons.chat_bubble, "Message", controller.onMessageDriver, primaryGold),
-                    _buildCircleAction(Icons.share, "Share Location", controller.onShareLocation, primaryGold),
+                    _buildCircleAction(Icons.phone, "Call driver", controller.onCallDriver, R.theme.secondary),
+                    _buildCircleAction(Icons.chat_bubble, "Message", controller.onMessageDriver, R.theme.secondary),
+                    _buildCircleAction(Icons.share, "Share Location", controller.onShareLocation, R.theme.secondary),
                   ],
                 ),
 
@@ -166,18 +161,18 @@ class RideBookedView extends GetView<RideBookedController> {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                   decoration: BoxDecoration(
-                    color: primaryGold.withOpacity(0.15),
+                    color: R.theme.secondary.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: primaryGold.withOpacity(0.5)),
+                    border: Border.all(color: R.theme.secondary.withOpacity(0.5)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.access_time_filled, color: primaryGold, size: 18),
+                      Icon(Icons.access_time_filled, color: R.theme.secondary, size: 18),
                       const SizedBox(width: 8),
                       Obx(() => Text(
                         controller.timeLeft.value,
-                        style: TextStyle(color: primaryGold, fontWeight: FontWeight.bold, fontSize: 16),
+                        style: TextStyle(color: R.theme.secondary, fontWeight: FontWeight.bold, fontSize: 16),
                       )),
                     ],
                   ),
@@ -186,11 +181,11 @@ class RideBookedView extends GetView<RideBookedController> {
                 const SizedBox(height: 20),
 
                 // --- Details List ---
-                _buildDetailRow("Pickup Time", controller.pickupTime, textGrey, primaryGold),
+                _buildDetailRow("Pickup Time", controller.pickupTime, R.theme.grey, R.theme.secondary),
                 const SizedBox(height: 10),
-                _buildDetailRow("Hourly Rate", "\$${controller.hourlyRate.toInt()}", textGrey, primaryGold),
+                _buildDetailRow("Hourly Rate", "\$${controller.hourlyRate.toInt()}", R.theme.grey, R.theme.secondary),
                 const SizedBox(height: 10),
-                _buildDetailRow("Booked hours", "${controller.initialBookedHours} hours", textGrey, primaryGold),
+                _buildDetailRow("Booked hours", "${controller.initialBookedHours} hours", R.theme.grey, R.theme.secondary),
 
                 // Show Extended Hours only if they exist
                 Obx(() {
@@ -200,7 +195,7 @@ class RideBookedView extends GetView<RideBookedController> {
                       child: _buildDetailRow(
                           "Extended hours",
                           "${(controller.extendedHours.value * 60).toInt()} mins",
-                          textGrey,
+                          R.theme.grey,
                           Colors.redAccent // Highlight extension
                       ),
                     );
@@ -222,7 +217,7 @@ class RideBookedView extends GetView<RideBookedController> {
                     ),
                     Obx(() => Text(
                       "\$${controller.estimatedTotal.value.toStringAsFixed(2)}",
-                      style: TextStyle(color: primaryGold, fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: R.theme.secondary, fontSize: 18, fontWeight: FontWeight.bold),
                     )),
                   ],
                 ),
@@ -236,7 +231,7 @@ class RideBookedView extends GetView<RideBookedController> {
                   child: ElevatedButton(
                     onPressed: controller.openExtendTimeSheet,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryGold,
+                      backgroundColor: R.theme.secondary,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       elevation: 0,
                     ),

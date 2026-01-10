@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:apex/common/widgets/maps/map_component.dart';
 import '../../../../core/core.dart';
 import '../controllers/add_label_controller.dart';
 
@@ -14,38 +14,31 @@ class MapPickerView extends GetView<AddLabelController> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
       ),
       child: Scaffold(
         body: Stack(
           children: [
+
             // 1. Map Layer
-            FlutterMap(
+            MapComponent(
               mapController: controller.pickerMapController,
-              options: MapOptions(
-                initialCenter: const LatLng(37.7749, -122.4194), // Default SF
-                initialZoom: 15.0,
-                onPositionChanged: (pos, hasGesture) {
-                  if (hasGesture) {
-                    controller.updatePickedLocation(pos.center!);
-                  }
-                },
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate:
-                      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                  subdomains: const ['a', 'b', 'c', 'd'],
-                  userAgentPackageName: 'com.devitcity.apex',
-                ),
-              ],
+              initialCenter: const LatLng(37.7749, -122.4194), // Default SF
+              initialZoom: 15.0,
+              onPositionChanged: (pos, hasGesture) {
+                if (hasGesture) {
+                  controller.updatePickedLocation(pos.center!);
+                }
+              },
             ),
 
             // 2. Fixed Center Pin
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 40), // Lift pin tip to center
+                padding: const EdgeInsets.only(
+                  bottom: 40,
+                ),
                 child: Icon(
                   Icons.location_on,
                   color: R.theme.goldAccent,
@@ -79,12 +72,13 @@ class MapPickerView extends GetView<AddLabelController> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0B0B0C),
+                  color: R.theme.darkBackground,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+
                     const Text(
                       "Name this location",
                       style: TextStyle(
@@ -92,7 +86,9 @@ class MapPickerView extends GetView<AddLabelController> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+
                     const SizedBox(height: 10),
+
                     // Name Input
                     TextField(
                       controller: controller.placeNameController,
@@ -108,7 +104,9 @@ class MapPickerView extends GetView<AddLabelController> {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 16),
+
                     SizedBox(
                       width: double.infinity,
                       height: 50,

@@ -7,6 +7,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../routes/app_pages.dart';
+
 class PointToPointController extends GetxController {
   final MapController mapController = MapController();
 
@@ -60,8 +62,8 @@ class PointToPointController extends GetxController {
 
   void confirmRide() {
     // Pass location and address data to ride selection
-    Get.to(
-      RideSelectionView(),
+    Get.toNamed(
+      Routes.RIDE_SELECTION,
       arguments: {
         'pickupAddress': pickupInput.text,
         'dropoffAddress': dropoffInput.text,
@@ -73,7 +75,7 @@ class PointToPointController extends GetxController {
     );
   }
 
-  void scheduleRide() => Get.to(ScheduleRideView());
+  void scheduleRide() => Get.toNamed(Routes.SCHEDULE_RIDE);
 
   Future<void> fetchRoute() async {
     final start = pickupLocation;

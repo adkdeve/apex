@@ -1,3 +1,4 @@
+import 'package:apex/common/widgets/maps/map_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -8,46 +9,39 @@ class RequestDetailView extends GetView<RequestDetailController> {
   const RequestDetailView({super.key});
 
   // Color Constants extracted from the image
-  static const Color kGoldPrimary = Color(0xFFC6A152); // The main button/text gold
-  static const Color kCardBg = Colors.black;           // Main card background
-  static const Color kNoteBg = Color(0xFF352F22);      // The dark brownish note background
-  static const Color kGreyText = Color(0xFF9E9E9E);    // Secondary text
-  static const Color kDivider = Color(0xFF2C2C2C);     // Separator lines
-  static const Color kSurface = Color(0xFF1E1E1E);     // Car info box background
+  static const Color kGoldPrimary = Color(
+    0xFFC6A152,
+  ); // The main button/text gold
+  static const Color kCardBg = Colors.black; // Main card background
+  static const Color kNoteBg = Color(
+    0xFF352F22,
+  ); // The dark brownish note background
+  static const Color kGreyText = Color(0xFF9E9E9E); // Secondary text
+  static const Color kDivider = Color(0xFF2C2C2C); // Separator lines
+  static const Color kSurface = Color(0xFF1E1E1E); // Car info box background
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Stack(
-        children: [
-          _buildMap(),
-          _buildHeader(),
-          _buildDraggableSheet(context),
-        ],
+        children: [_buildMap(), _buildHeader(), _buildDraggableSheet(context)],
       ),
     );
   }
 
   // 1. The Map Layer
   Widget _buildMap() {
-    return FlutterMap(
-      mapController: controller.mapController,
-      options: MapOptions(
+    return Obx(
+      () => MapComponent(
+        mapController: controller.mapController,
         initialCenter: controller.pickupLocation,
         initialZoom: 14.5,
-        interactionOptions: const InteractionOptions(
-          flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-        ),
+        tileLayerUrl:
+            'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+        markers: controller.markers.toList(),
+        interactionFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
       ),
-      children: [
-        TileLayer(
-          // Light theme map tiles to contrast with the black card
-          urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          subdomains: const ['a', 'b', 'c', 'd'],
-        ),
-        Obx(() => MarkerLayer(markers: controller.markers.toList())),
-      ],
     );
   }
 
@@ -86,8 +80,8 @@ class RequestDetailView extends GetView<RequestDetailController> {
   Widget _buildDraggableSheet(BuildContext context) {
     return DraggableScrollableSheet(
       initialChildSize: 0.65, // Card starts at ~65% height (matches image)
-      minChildSize: 0.40,     // Collapses to 40%
-      maxChildSize: 0.95,     // Expands to full screen
+      minChildSize: 0.40, // Collapses to 40%
+      maxChildSize: 0.95, // Expands to full screen
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -148,7 +142,10 @@ class RequestDetailView extends GetView<RequestDetailController> {
                           ),
                           const SizedBox(height: 4),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: kGoldPrimary,
                               borderRadius: BorderRadius.circular(10),
@@ -161,7 +158,7 @@ class RequestDetailView extends GetView<RequestDetailController> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ],
@@ -221,13 +218,19 @@ class RequestDetailView extends GetView<RequestDetailController> {
                                 child: Image.asset(
                                   'assets/images/car_placeholder.png', // Ensure you have this asset
                                   fit: BoxFit.contain,
-                                  errorBuilder: (_,__,___) => const Icon(Icons.directions_car, color: Colors.grey),
+                                  errorBuilder: (_, __, ___) => const Icon(
+                                    Icons.directions_car,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 4),
                               // Plate Badge
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFE0E0E0),
                                   borderRadius: BorderRadius.circular(4),
@@ -251,20 +254,32 @@ class RequestDetailView extends GetView<RequestDetailController> {
                             const SizedBox(width: 12),
                             _buildContactCircle(Icons.chat_bubble_outline),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 20),
 
                   // -- Details Grid --
-                  _buildDetailRow("Pickup Date", controller.requestData['pickupDate'] as String),
+                  _buildDetailRow(
+                    "Pickup Date",
+                    controller.requestData['pickupDate'] as String,
+                  ),
                   const SizedBox(height: 8),
-                  _buildDetailRow("Pickup Time", controller.requestData['pickupTime'] as String),
+                  _buildDetailRow(
+                    "Pickup Time",
+                    controller.requestData['pickupTime'] as String,
+                  ),
                   const SizedBox(height: 8),
-                  _buildDetailRow("Hourly Rate", "\$${controller.requestData['hourlyRate']}"),
+                  _buildDetailRow(
+                    "Hourly Rate",
+                    "\$${controller.requestData['hourlyRate']}",
+                  ),
                   const SizedBox(height: 8),
-                  _buildDetailRow("Booked hours", "${controller.requestData['bookedHours']} hours"),
+                  _buildDetailRow(
+                    "Booked hours",
+                    "${controller.requestData['bookedHours']} hours",
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -417,10 +432,7 @@ class RequestDetailView extends GetView<RequestDetailController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: const TextStyle(color: kGreyText, fontSize: 13),
-        ),
+        Text(label, style: const TextStyle(color: kGreyText, fontSize: 13)),
         Text(
           value,
           style: const TextStyle(

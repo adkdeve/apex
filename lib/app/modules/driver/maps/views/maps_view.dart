@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import '../controllers/maps_controller.dart';
+import 'package:apex/common/widgets/maps/map_component.dart';
 
 class MapsView extends StatelessWidget {
   MapsView({super.key});
@@ -42,27 +43,15 @@ class MapsView extends StatelessWidget {
   }
 
   Widget _buildMap() {
-    return FlutterMap(
-      mapController: controller.mapController,
-      options: MapOptions(
+    return Obx(
+      () => MapComponent(
+        mapController: controller.mapController,
         initialCenter: controller.currentLocation.value,
         initialZoom: 15,
-        interactionOptions: const InteractionOptions(
-          flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-        ),
+        interactionFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+        circles: controller.circles,
+        markers: controller.markers,
       ),
-      children: [
-        TileLayer(
-          urlTemplate:
-              'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-          subdomains: const ['a', 'b', 'c', 'd'],
-          userAgentPackageName: 'com.devitcity.apex',
-        ),
-        if (controller.circles.isNotEmpty)
-          CircleLayer(circles: controller.circles),
-        if (controller.markers.isNotEmpty)
-          MarkerLayer(markers: controller.markers),
-      ],
     );
   }
 
@@ -202,5 +191,4 @@ class MapsView extends StatelessWidget {
       ),
     );
   }
-
 }

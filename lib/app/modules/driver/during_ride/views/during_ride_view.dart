@@ -1,3 +1,4 @@
+import 'package:apex/common/widgets/maps/map_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -15,40 +16,32 @@ class DuringRideView extends GetView<DuringRideController> {
   static const Color kGreyLabel = Color(0xFF9E9E9E);
   static const Color kSurface = Color(0xFF2C2C2C);
   static const Color kDivider = Color(0xFF2C2C2C);
-  static const Color kDialogBg = Color(0xFF252525); // Slightly lighter black for dialog
+  static const Color kDialogBg = Color(
+    0xFF252525,
+  ); // Slightly lighter black for dialog
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Stack(
-        children: [
-          _buildMap(),
-          _buildHeader(),
-          _buildDraggableSheet(context),
-        ],
+        children: [_buildMap(), _buildHeader(), _buildDraggableSheet(context)],
       ),
     );
   }
 
   // --- Map ---
   Widget _buildMap() {
-    return FlutterMap(
-      mapController: controller.mapController,
-      options: MapOptions(
+    return Obx(
+      () => MapComponent(
+        mapController: controller.mapController,
         initialCenter: controller.pickupLocation,
         initialZoom: 14.5,
-        interactionOptions: const InteractionOptions(
-          flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-        ),
+        tileLayerUrl:
+            'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+        markers: controller.markers.toList(),
+        interactionFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
       ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          subdomains: const ['a', 'b', 'c', 'd'],
-        ),
-        Obx(() => MarkerLayer(markers: controller.markers.toList())),
-      ],
     );
   }
 
@@ -133,7 +126,8 @@ class DuringRideView extends GetView<DuringRideController> {
                           CircleAvatar(
                             radius: 24,
                             backgroundImage: NetworkImage(
-                              controller.requestData['passengerImage'] as String,
+                              controller.requestData['passengerImage']
+                                  as String,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -142,7 +136,8 @@ class DuringRideView extends GetView<DuringRideController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  controller.requestData['passengerName'] as String,
+                                  controller.requestData['passengerName']
+                                      as String,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -151,7 +146,10 @@ class DuringRideView extends GetView<DuringRideController> {
                                 ),
                                 const SizedBox(height: 4),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: kGoldPrimary,
                                     borderRadius: BorderRadius.circular(10),
@@ -164,12 +162,15 @@ class DuringRideView extends GetView<DuringRideController> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
                             decoration: BoxDecoration(
                               color: kGoldPrimary,
                               borderRadius: BorderRadius.circular(20),
@@ -185,7 +186,11 @@ class DuringRideView extends GetView<DuringRideController> {
                                   ),
                                 ),
                                 SizedBox(width: 4),
-                                Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16)
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
                               ],
                             ),
                           ),
@@ -245,12 +250,18 @@ class DuringRideView extends GetView<DuringRideController> {
                                     child: Image.asset(
                                       'assets/images/car_placeholder.png',
                                       fit: BoxFit.contain,
-                                      errorBuilder: (_,__,___) => const Icon(Icons.directions_car, color: Colors.grey),
+                                      errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.directions_car,
+                                        color: Colors.grey,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: const Color(0xFFE0E0E0),
                                       borderRadius: BorderRadius.circular(4),
@@ -273,7 +284,7 @@ class DuringRideView extends GetView<DuringRideController> {
                                 const SizedBox(width: 12),
                                 _buildContactCircle(Icons.chat_bubble_outline),
                               ],
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -292,16 +303,22 @@ class DuringRideView extends GetView<DuringRideController> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.access_time_filled, color: kGoldPrimary, size: 18),
+                      const Icon(
+                        Icons.access_time_filled,
+                        color: kGoldPrimary,
+                        size: 18,
+                      ),
                       const SizedBox(width: 8),
-                      Obx(() => Text(
-                        "${controller.timeLeft} left",
-                        style: const TextStyle(
-                          color: kGoldPrimary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                      Obx(
+                        () => Text(
+                          "${controller.timeLeft} left",
+                          style: const TextStyle(
+                            color: kGoldPrimary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      )),
+                      ),
                     ],
                   ),
                 ),
@@ -525,7 +542,7 @@ class DuringRideView extends GetView<DuringRideController> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -574,10 +591,7 @@ class DuringRideView extends GetView<DuringRideController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: const TextStyle(color: kGreyLabel, fontSize: 13),
-        ),
+        Text(label, style: const TextStyle(color: kGreyLabel, fontSize: 13)),
         Text(
           value,
           style: const TextStyle(

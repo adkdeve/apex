@@ -1,3 +1,4 @@
+import 'package:apex/common/widgets/maps/map_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -133,34 +134,23 @@ class DropoffNavigationView extends GetView<DropoffNavigationController> {
   }
 
   Widget _buildMap() {
-    return FlutterMap(
-      mapController: controller.mapController,
-      options: MapOptions(
+    return Obx(
+      () => MapComponent(
+        mapController: controller.mapController,
         initialCenter: controller.currentLocation.value,
         initialZoom: 14.5,
-        interactionOptions: const InteractionOptions(
-          flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-        ),
-      ),
-      children: [
-        TileLayer(
-          urlTemplate:
-              'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
-          subdomains: const ['a', 'b', 'c', 'd'],
-        ),
-        Obx(
-          () => PolylineLayer(
-            polylines: [
-              Polyline(
-                points: controller.polylines.expand((e) => e.points).toList(),
-                strokeWidth: 4.0,
-                color: const Color(0xFF2F4EFF), // Royal Blue
-              ),
-            ],
+        tileLayerUrl:
+            'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+        interactionFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+        polylines: [
+          Polyline(
+            points: controller.polylines.expand((e) => e.points).toList(),
+            strokeWidth: 4.0,
+            color: const Color(0xFF2F4EFF), // Royal Blue
           ),
-        ),
-        Obx(() => MarkerLayer(markers: controller.markers.toList())),
-      ],
+        ],
+        markers: controller.markers.toList(),
+      ),
     );
   }
 

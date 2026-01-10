@@ -1,3 +1,4 @@
+import 'package:apex/common/widgets/maps/map_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -28,24 +29,16 @@ class AcceptedRequestView extends GetView<AcceptedRequestController> {
   }
 
   Widget _buildMap() {
-    return FlutterMap(
-      mapController: controller.mapController,
-      options: MapOptions(
+    return Obx(
+      () => MapComponent(
+        mapController: controller.mapController,
         initialCenter: controller.pickupLocation,
         initialZoom: 14.5,
-        interactionOptions: const InteractionOptions(
-          flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-        ),
+        tileLayerUrl:
+            'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+        markers: controller.markers.toList(),
+        interactionFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
       ),
-      children: [
-        TileLayer(
-          // Light map style to contrast with dark bottom sheet
-          urlTemplate:
-              'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          subdomains: const ['a', 'b', 'c', 'd'],
-        ),
-        Obx(() => MarkerLayer(markers: controller.markers.toList())),
-      ],
     );
   }
 

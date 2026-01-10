@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:apex/common/widgets/navigation/back_button_header.dart';
+import '../../../../../common/widgets/navigation/custom_app_bar.dart';
 import '../../../../core/core.dart';
 import '../controllers/add_label_controller.dart';
 
@@ -10,11 +11,6 @@ class AddLabelView extends GetView<AddLabelController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AddLabelController());
-
-    final Color textGrey = R.theme.textGrey;
-    final Color buttonBg = R.theme.cardBg;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -23,14 +19,12 @@ class AddLabelView extends GetView<AddLabelController> {
       ),
       child: Scaffold(
         backgroundColor: R.theme.darkBackground,
+        appBar: CustomAppBar(title: 'Add Label'),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                BackButtonHeader(title: "Add Label", buttonBg: buttonBg),
-
-                40.sbh,
 
                 _buildLabelOption(
                   icon: Icons.home_outlined,
@@ -38,7 +32,7 @@ class AddLabelView extends GetView<AddLabelController> {
                   subtitle: "Set home",
                   primaryGold: R.theme.secondary,
                   textWhite: R.theme.white,
-                  textGrey: textGrey,
+                  textGrey: R.theme.grey,
                   onTap: () {},
                 ),
 
@@ -50,7 +44,7 @@ class AddLabelView extends GetView<AddLabelController> {
                   subtitle: "Set work",
                   primaryGold: R.theme.secondary,
                   textWhite: R.theme.white,
-                  textGrey: textGrey,
+                  textGrey: R.theme.grey,
                   onTap: () {},
                 ),
 
@@ -69,7 +63,7 @@ class AddLabelView extends GetView<AddLabelController> {
                           subtitle: place.address,
                           primaryGold: R.theme.secondary,
                           textWhite: R.theme.white,
-                          textGrey: textGrey,
+                          textGrey: R.theme.grey,
                           onTap: () {},
                         );
                       },
@@ -99,8 +93,6 @@ class AddLabelView extends GetView<AddLabelController> {
                     ),
                   ),
                 ),
-
-                30.sbh,
               ],
             ),
           ),

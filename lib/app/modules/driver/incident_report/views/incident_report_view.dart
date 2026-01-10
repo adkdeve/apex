@@ -5,6 +5,7 @@ import 'package:apex/app/modules/driver/shared/widgets/driver_card.dart';
 import 'package:apex/app/modules/driver/shared/utils/dashed_border_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:apex/common/widgets/label_widget.dart';
 import '../controllers/incident_report_controller.dart';
 
 class IncidentReportView extends StatelessWidget {
@@ -65,7 +66,7 @@ class IncidentReportView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildLabel("Incident Type Selector"),
+                    const LabelWidget(text: "Incident Type Selector"),
                     Obx(
                       () => DriverCard(
                         child: Padding(
@@ -100,7 +101,7 @@ class IncidentReportView extends StatelessWidget {
 
                     const SizedBox(height: 24),
 
-                    _buildLabel("Description"),
+                    const LabelWidget(text: "Description"),
                     Container(
                       height: 120, // Fixed height for large text area
                       decoration: BoxDecoration(
@@ -124,7 +125,7 @@ class IncidentReportView extends StatelessWidget {
 
                     const SizedBox(height: 24),
 
-                    _buildLabel("Add up to 5 photos"),
+                    const LabelWidget(text: "Add up to 5 photos"),
                     Row(
                       children: [
                         GestureDetector(
@@ -194,20 +195,6 @@ class IncidentReportView extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

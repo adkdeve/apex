@@ -1,3 +1,4 @@
+import 'package:apex/common/widgets/maps/map_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -18,23 +19,16 @@ class RideInfoView extends GetView<RideInfoController> {
   }
 
   Widget _buildMap() {
-    return FlutterMap(
-      mapController: controller.mapController,
-      options: MapOptions(
+    return Obx(
+      () => MapComponent(
+        mapController: controller.mapController,
         initialCenter: controller.pickupLocation,
-        initialZoom: 13,
-        interactionOptions: const InteractionOptions(
-          flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-        ),
+        initialZoom: 13, // Lower zoom for overview of entire route
+        tileLayerUrl:
+            'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+        markers: controller.markers.toList(),
+        interactionFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
       ),
-      children: [
-        TileLayer(
-          urlTemplate:
-              'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          subdomains: const ['a', 'b', 'c', 'd'],
-        ),
-        Obx(() => MarkerLayer(markers: controller.markers.toList())),
-      ],
     );
   }
 

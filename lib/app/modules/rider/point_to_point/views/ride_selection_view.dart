@@ -12,7 +12,6 @@ class RideSelectionView extends GetView<RideSelectionController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(RideSelectionController());
 
     final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -27,7 +26,7 @@ class RideSelectionView extends GetView<RideSelectionController> {
             polylines: [
               MapPolylineHelper.routePolyline(
                 points: controller.routePoints,
-                color: Colors.black,
+                color: R.theme.black,
                 strokeWidth: 4.0,
               ),
             ],
@@ -142,8 +141,6 @@ class RideSelectionView extends GetView<RideSelectionController> {
                     ),
                   ),
                 ),
-
-                10.sbh,
               ],
             ),
           ),

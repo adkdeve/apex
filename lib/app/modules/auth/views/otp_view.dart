@@ -15,7 +15,6 @@ class OtpView extends GetView<OtpController> {
 
   @override
   Widget build(BuildContext context) {
-    // Get email from arguments if not passed as parameter
     final String displayEmail = email ?? Get.arguments ?? 'user@example.com';
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -24,7 +23,7 @@ class OtpView extends GetView<OtpController> {
         statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        backgroundColor: R.theme.black,
+        backgroundColor: R.theme.darkBackground,
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,71 +82,78 @@ class OtpView extends GetView<OtpController> {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 6),
                             child: Obx(() {
+                              // Reactive state from Controller
                               bool isSuccess = controller.isSuccess.value;
                               bool isError = controller.isError.value;
 
-                              // Now this check will execute freshly every time you type
-                              bool hasValue =
-                                  controller.controllers[index].text.isNotEmpty;
+                              // Listen to Focus Changes to trigger rebuilds
+                              return AnimatedBuilder(
+                                animation: controller.focusNodes[index],
+                                builder: (context, child) {
 
-                              Color borderColor = Colors.grey[700]!;
-                              Color bgColor = Colors.transparent;
-                              Color textColor = R.theme.white;
+                                  bool hasValue = controller.controllers[index].text.isNotEmpty;
+                                  bool isFocused = controller.focusNodes[index].hasFocus;
 
-                              if (isSuccess) {
-                                borderColor = Colors.green;
-                                bgColor = Colors.green.withOpacity(0.1);
-                                textColor = Colors.green;
-                              } else if (isError) {
-                                borderColor = R.theme.errorColor;
-                                bgColor = R.theme.errorBg;
-                                textColor = R.theme.errorColor;
-                              } else if (hasValue) {
-                                borderColor = R.theme.secondary;
-                                bgColor = R.theme.goldBg;
-                                textColor = R.theme.secondary;
-                              }
+                                  Color borderColor = Colors.grey[700]!;
+                                  Color bgColor = Colors.transparent;
+                                  Color textColor = R.theme.white;
 
-                              return Container(
-                                width: 56,
-                                height: 56,
-                                decoration: BoxDecoration(
-                                  color: bgColor,
-                                  border: Border.all(
-                                    color: borderColor,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Center(
-                                  child: TextField(
-                                    controller: controller.controllers[index],
-                                    focusNode: controller.focusNodes[index],
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(1),
-                                      FilteringTextInputFormatter.digitsOnly,
-                                    ],
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: textColor,
+                                  if (isSuccess) {
+                                    borderColor = Colors.green;
+                                    bgColor = Colors.green.withOpacity(0.1);
+                                    textColor = Colors.green;
+                                  } else if (isError) {
+                                    borderColor = R.theme.errorColor;
+                                    bgColor = R.theme.errorBg;
+                                    textColor = R.theme.errorColor;
+                                    // CHANGED: Added 'isFocused' to this check
+                                  } else if (isFocused || hasValue) {
+                                    borderColor = R.theme.secondary;
+                                    bgColor = R.theme.goldBg;
+                                    textColor = R.theme.secondary;
+                                  }
+
+                                  return Container(
+                                    width: 56,
+                                    height: 56,
+                                    decoration: BoxDecoration(
+                                      color: bgColor,
+                                      border: Border.all(
+                                        color: borderColor,
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      counterText: "",
-                                      contentPadding: EdgeInsets.zero,
+                                    child: Center(
+                                      child: TextField(
+                                        controller: controller.controllers[index],
+                                        focusNode: controller.focusNodes[index],
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(1),
+                                          FilteringTextInputFormatter.digitsOnly,
+                                        ],
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: textColor,
+                                        ),
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          counterText: "",
+                                          contentPadding: EdgeInsets.zero,
+                                        ),
+                                        onChanged: (val) {
+                                          if (val.isEmpty && index > 0) {
+                                            controller.focusNodes[index - 1].requestFocus();
+                                          }
+                                          controller.onChanged(val, index);
+                                        },
+                                      ),
                                     ),
-                                    onChanged: (val) {
-                                      if (val.isEmpty && index > 0) {
-                                        controller.focusNodes[index - 1]
-                                            .requestFocus();
-                                      }
-                                      controller.onChanged(val, index);
-                                    },
-                                  ),
-                                ),
+                                  );
+                                },
                               );
                             }),
                           );

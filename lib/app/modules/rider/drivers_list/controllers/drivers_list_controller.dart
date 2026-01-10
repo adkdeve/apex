@@ -2,7 +2,6 @@ import 'package:apex/app/modules/rider/ride_booked/views/ride_booked_view.dart';
 import 'package:apex/app/data/models/ride_booking_data.dart';
 import 'package:get/get.dart';
 import 'package:apex/app/data/models/driver_model.dart';
-
 import '../../../../../utils/helpers/snackbar.dart';
 
 class DriversListController extends GetxController {

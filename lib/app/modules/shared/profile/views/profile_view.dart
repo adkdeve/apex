@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:apex/utils/helpers/input_formatters.dart';
 import '../controllers/profile_controller.dart';
+import 'package:apex/common/widgets/label_widget.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class ProfileView extends StatelessWidget {
                     const SizedBox(height: 32),
 
                     // Form Fields
-                    _buildLabel("First Name"),
+                    const LabelWidget(text: "First Name"),
                     _buildTextField(
                       "First Name",
                       controller.firstNameController,
@@ -48,12 +49,12 @@ class ProfileView extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    _buildLabel("Last Name"),
+                    const LabelWidget(text: "Last Name"),
                     _buildTextField("Last Name", controller.lastNameController),
 
                     const SizedBox(height: 16),
 
-                    _buildLabel("Email"),
+                    const LabelWidget(text: "Email"),
                     _buildTextField(
                       "Email",
                       controller.emailController,
@@ -62,7 +63,7 @@ class ProfileView extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    _buildLabel("Phone Number"),
+                    const LabelWidget(text: "Phone Number"),
                     _buildTextField(
                       "Phone Number",
                       controller.phoneController,
@@ -76,7 +77,7 @@ class ProfileView extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    _buildLabel("City"),
+                    const LabelWidget(text: "City"),
                     _buildTextField("city", controller.cityController),
 
                     const SizedBox(height: 40),
@@ -211,23 +212,6 @@ class ProfileView extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0, left: 4.0),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: _textWhite,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
     );
   }
 

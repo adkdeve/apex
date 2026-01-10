@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:apex/common/widgets/navigation/back_button_header.dart';
+import '../../../../../common/widgets/navigation/custom_app_bar.dart';
 import '../../../../core/core.dart';
 import '../controllers/add_label_controller.dart';
 
@@ -10,7 +11,6 @@ class SearchLocationView extends GetView<AddLabelController> {
 
   @override
   Widget build(BuildContext context) {
-    final Color buttonBg = R.theme.cardBg;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -20,15 +20,13 @@ class SearchLocationView extends GetView<AddLabelController> {
       ),
       child: Scaffold(
         backgroundColor: R.theme.darkBackground,
+        appBar: CustomAppBar(title: 'Add Label'),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BackButtonHeader(title: "Add Label", buttonBg: buttonBg),
-
-                10.sbh,
 
                 Container(
                   height: 50,
@@ -116,8 +114,6 @@ class SearchLocationView extends GetView<AddLabelController> {
                     ),
                   ),
                 ),
-
-                30.sbh,
               ],
             ),
           ),

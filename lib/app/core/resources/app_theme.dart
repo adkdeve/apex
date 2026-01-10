@@ -19,6 +19,7 @@ class AppThemeData {
   final Color grey = Colors.grey;
   final Color yellow = Colors.yellow;
   final Color green = Color(0xff0A6375);
+  final Color transparent = Colors.transparent;
 
   // Frequently used greys
   final Color color400 = Color(0xff94A3B8);
@@ -51,6 +52,7 @@ class AppThemeData {
   // Dark Theme Colors
   final Color darkBackground = const Color(0xFF0B0B0C);
   final Color cardBg = const Color(0xFF262626);
+
   final Color cardBgVariant = const Color(0xFF1E1E1E);
 
   // Driver Module Colors (consolidated to avoid duplicates)

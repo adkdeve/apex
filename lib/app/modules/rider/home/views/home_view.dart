@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../../core/core.dart';
+import '../../../../routes/app_pages.dart';
 import '../../../main/controllers/main_controller.dart';
 import '../../hourly_reservation/views/hourly_reservation_view.dart';
 import '../../point_to_point/views/point_to_point_view.dart';
@@ -56,7 +57,7 @@ class HomeView extends GetView<HomeController> {
                       image: 'assets/images/point_to_point.png',
                       context: context,
                       onTap: () {
-                        Get.to(PointToPointView());
+                        Get.toNamed(Routes.POINT_TO_POINT);
                       },
                     ),
                     const SizedBox(height: 8),
@@ -76,7 +77,7 @@ class HomeView extends GetView<HomeController> {
                       image: 'assets/images/hourly_reservation.png',
                       context: context,
                       onTap: () {
-                        Get.to(() => HourlyReservationView());
+                        Get.toNamed(Routes.HOURLY_RESERVATION);
                       },
                     ),
                   ],

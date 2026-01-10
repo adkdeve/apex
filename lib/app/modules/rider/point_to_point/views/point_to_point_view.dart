@@ -1,5 +1,6 @@
 import 'package:apex/app/modules/rider/point_to_point/views/add_label_view.dart';
 import 'package:apex/app/modules/rider/search/views/search_view.dart';
+import 'package:apex/app/routes/app_pages.dart';
 import 'package:apex/common/widgets/maps/map_component.dart';
 import 'package:apex/common/widgets/forms/route_input_fields.dart';
 import 'package:apex/common/widgets/sheets/draggable_bottom_sheet.dart';
@@ -14,18 +15,14 @@ class PointToPointView extends GetView<PointToPointController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(PointToPointController());
-
-    const Color sheetBg = Color(0xFF0B0B0C);
-    const Color textWhite = Colors.white;
 
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
       ),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -90,9 +87,12 @@ class PointToPointView extends GetView<PointToPointController> {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.notifications_none_rounded,
-                          color: Colors.black,
+                        child: GestureDetector(
+                          onTap: () => Get.toNamed(Routes.NOTIFICATIONS),
+                          child: const Icon(
+                            Icons.notifications_none_rounded,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],
@@ -127,15 +127,15 @@ class PointToPointView extends GetView<PointToPointController> {
               initialChildSize: 0.55,
               minChildSize: 0.25,
               maxChildSize: 0.65,
-              backgroundColor: sheetBg,
+              backgroundColor: R.theme.darkBackground,
               onSheetChanged: (height) => controller.sheetHeight.value = height,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Where would you like to go?",
                     style: TextStyle(
-                      color: textWhite,
+                      color: R.theme.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Urbanist',
@@ -181,7 +181,7 @@ class PointToPointView extends GetView<PointToPointController> {
                       12.sbw,
 
                       InkWell(
-                        onTap: () => Get.to(AddLabelView()),
+                        onTap: () => Get.toNamed(Routes.ADD_LABEL),
                         borderRadius: BorderRadius.circular(30),
                         child: Container(
                           width: 40,

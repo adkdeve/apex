@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-
 import '../../../../../utils/helpers/snackbar.dart';
 
 class RideBookedController extends GetxController {
@@ -16,14 +15,14 @@ class RideBookedController extends GetxController {
   late ActiveRideData? activeRideData;
 
   // --- DYNAMIC DATA (from activeRideData) ---
-  var driverName = "".obs;
-  var driverRating = "".obs;
-  var arrivalTime = "".obs;
-  var actualFare = "".obs;
-  var carModel = "".obs;
-  var plateNumber = "".obs;
-  var pickupAddress = "".obs;
-  var dropoffAddress = "".obs;
+  var driverName = "Jane".obs;
+  var driverRating = "4.5".obs;
+  var arrivalTime = "10:15".obs;
+  var actualFare = "12".obs;
+  var carModel = "Suzuki".obs;
+  var plateNumber = "ABF 1881".obs;
+  var pickupAddress = "H 22b, Bakers Str.".obs;
+  var dropoffAddress = "Apt. 36, New Sapphire".obs;
 
   // Route Data
   var pickupLocation = const LatLng(37.7749, -122.4194).obs;

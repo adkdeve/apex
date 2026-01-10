@@ -44,7 +44,7 @@ class RegisterView extends GetView<RegisterController> {
         statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: R.theme.darkBackground,
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),

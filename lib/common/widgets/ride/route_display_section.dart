@@ -39,7 +39,7 @@ class RouteDisplaySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget content = Container(
-      padding: padding ?? const EdgeInsets.all(6),
+      padding: padding ?? const EdgeInsets.all(16),
       decoration: backgroundColor != null
           ? BoxDecoration(
               color: backgroundColor,

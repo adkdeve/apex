@@ -31,7 +31,7 @@ class AddLabelController extends GetxController {
 
   // 2. Navigation: Go to Map Picker
   void goToMapPicker() {
-    placeNameController.clear(); // Reset input
+    placeNameController.clear();
     Get.to(() => const MapPickerView());
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:apex/common/widgets/navigation/back_button_header.dart';
+import '../../../../../common/widgets/navigation/custom_app_bar.dart';
 import '../../../../core/core.dart';
 import '../../../../data/models/driver_model.dart';
 import '../controllers/drivers_list_controller.dart';
@@ -11,8 +12,6 @@ class DriversListView extends GetView<DriversListController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(DriversListController());
-
     final Color buttonBg = R.theme.cardBg;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -23,15 +22,12 @@ class DriversListView extends GetView<DriversListController> {
       ),
       child: Scaffold(
         backgroundColor: R.theme.darkBackground,
+        appBar: CustomAppBar(title: 'Driver List'),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                BackButtonHeader(title: "Drivers List", buttonBg: buttonBg),
-
-                20.sbh,
-
                 Expanded(
                   child: Obx(() {
                     if (controller.drivers.isEmpty) {

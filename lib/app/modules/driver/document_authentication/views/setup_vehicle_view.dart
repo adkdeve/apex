@@ -6,6 +6,7 @@ import 'package:apex/app/modules/driver/document_authentication/views/authentica
 import 'package:apex/utils/helpers/validation_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:apex/common/widgets/label_widget.dart';
 
 class SetupVehicleController extends GetxController with LoadingStateMixin {
   // Form key for validation
@@ -141,7 +142,7 @@ class SetupVehicleView extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 // --- Form Fields ---
-                _buildLabel("Vehicle name"),
+                const LabelWidget(text: "Vehicle name"),
                 _buildTextField(
                   controller: controller.nameController,
                   hint: "e.g., Toyota Camry",
@@ -149,7 +150,7 @@ class SetupVehicleView extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                _buildLabel("Vehicle model"),
+                const LabelWidget(text: "Vehicle model"),
                 _buildTextField(
                   controller: controller.modelController,
                   hint: "e.g., 2022",
@@ -160,7 +161,7 @@ class SetupVehicleView extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                _buildLabel("Vehicle license plate"),
+                const LabelWidget(text: "Vehicle license plate"),
                 _buildTextField(
                   controller: controller.licensePlateController,
                   hint: "e.g., LEX-5563",
@@ -231,21 +232,6 @@ class SetupVehicleView extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  // Helper: Input Label
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0, left: 4.0),
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
         ),
       ),
     );

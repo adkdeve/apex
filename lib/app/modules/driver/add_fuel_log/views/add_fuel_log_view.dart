@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:apex/app/core/core.dart';
 import 'package:apex/app/modules/driver/shared/utils/dashed_border_painter.dart';
 import 'package:apex/app/modules/driver/shared/widgets/driver_header.dart';
+import 'package:apex/common/widgets/label_widget.dart';
 import 'package:apex/utils/helpers/validation_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -82,7 +83,7 @@ class AddFuelLogView extends StatelessWidget {
 
                       const SizedBox(height: 24),
 
-                      _buildLabel("Vendor Name"),
+                      const LabelWidget(text: "Vendor Name"),
                       _buildTextField(
                         controller: controller.vendorController,
                         hint: "Enter fuel station name",
@@ -94,7 +95,7 @@ class AddFuelLogView extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-                      _buildLabel("Gallons / Liters"),
+                      const LabelWidget(text: "Gallons / Liters"),
                       _buildTextField(
                         controller: controller.gallonsController,
                         hint: "0.00",
@@ -104,7 +105,7 @@ class AddFuelLogView extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-                      _buildLabel("Total Amount"),
+                      const LabelWidget(text: "Total Amount"),
                       _buildTextField(
                         controller: controller.costController,
                         hint: "0.00",
@@ -114,7 +115,7 @@ class AddFuelLogView extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-                      _buildLabel("Odometer Reading"),
+                      const LabelWidget(text: "Odometer Reading"),
                       _buildTextField(
                         controller: controller.odometerController,
                         hint: "Enter mileage",
@@ -124,7 +125,7 @@ class AddFuelLogView extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-                      _buildLabel("Vehicle Selector"),
+                      const LabelWidget(text: "Vehicle Selector"),
                       _buildDropdownTrigger(),
 
                       const SizedBox(height: 40),
@@ -158,20 +159,6 @@ class AddFuelLogView extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

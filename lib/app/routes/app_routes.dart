@@ -27,14 +27,17 @@ abstract class Routes {
   static const HOURLY_RESERVATION = _Paths.MAIN + _Paths.HOURLY_RESERVATION;
   static const PRICING_SUMMARY = _Paths.MAIN + _Paths.PRICING_SUMMARY;
   static const ADD_FUEL_LOG = _Paths.ADD_FUEL_LOG;
+  static const ADD_LABEL = _Paths.ADD_LABEL;
   static const VEHICLE_CHECKLIST = _Paths.VEHICLE_CHECKLIST;
   static const INCIDENT_REPORT = _Paths.INCIDENT_REPORT;
   static const RIDE_INFO = _Paths.RIDE_INFO;
+  static const RIDE_SELECTION = _Paths.RIDE_SELECTION;
   static const ACTIVE_RIDE = _Paths.ACTIVE_RIDE;
   static const DROPOFF_NAVIGATION = _Paths.DROPOFF_NAVIGATION;
   static const REQUEST_DETAIL = _Paths.REQUEST_DETAIL;
   static const ACCEPTED_REQUEST = _Paths.ACCEPTED_REQUEST;
   static const DURING_RIDE = _Paths.DURING_RIDE;
+  static const SCHEDULE_RIDE = _Paths.SCHEDULE_RIDE;
 }
 
 abstract class _Paths {
@@ -63,12 +66,15 @@ abstract class _Paths {
   static const HOURLY_RESERVATION = '/hourly-reservation';
   static const PRICING_SUMMARY = '/pricing-summary';
   static const ADD_FUEL_LOG = '/add-fuel-log';
+  static const ADD_LABEL = '/add-label';
   static const VEHICLE_CHECKLIST = '/vehicle-checklist';
   static const INCIDENT_REPORT = '/incident-report';
   static const RIDE_INFO = '/ride-info';
+  static const RIDE_SELECTION = '/ride-selection';
   static const ACTIVE_RIDE = '/active-ride';
   static const DROPOFF_NAVIGATION = '/dropoff-navigation';
   static const REQUEST_DETAIL = '/request-detail';
   static const ACCEPTED_REQUEST = '/accepted-request';
   static const DURING_RIDE = '/during-ride';
+  static const SCHEDULE_RIDE = '/schedule-ride';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../../common/widgets/navigation/custom_app_bar.dart';
 import '../../../../core/core.dart';
 import '../controllers/pricing_summary_controller.dart';
 
@@ -20,37 +21,7 @@ class PricingSummaryView extends GetView<PricingSummaryController> {
 
     return Scaffold(
       backgroundColor: bgDark,
-      // --- APP BAR ---
-      appBar: AppBar(
-        backgroundColor: bgDark,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "Pricing summary",
-          style: TextStyle(
-            color: textWhite,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: InkWell(
-            onTap: () => Get.back(),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white24,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.white,
-                size: 18,
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(title: 'Pricing Summary'),
 
       // --- BODY ---
       body: Padding(
