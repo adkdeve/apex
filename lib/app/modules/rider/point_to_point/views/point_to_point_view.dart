@@ -1,5 +1,5 @@
 import 'package:apex/app/modules/rider/point_to_point/views/add_label_view.dart';
-import 'package:apex/app/modules/rider/search/views/search_view.dart';
+import 'package:apex/app/modules/rider/point_to_point/views/map_picker_view.dart';
 import 'package:apex/app/routes/app_pages.dart';
 import 'package:apex/common/widgets/maps/map_component.dart';
 import 'package:apex/common/widgets/forms/route_input_fields.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../../core/core.dart';
+import '../controllers/add_label_controller.dart';
 import '../controllers/point_to_point_controller.dart';
 
 class PointToPointView extends GetView<PointToPointController> {
@@ -15,7 +16,6 @@ class PointToPointView extends GetView<PointToPointController> {
 
   @override
   Widget build(BuildContext context) {
-
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -31,29 +31,31 @@ class PointToPointView extends GetView<PointToPointController> {
             Obx(
               () => MapComponent(
                 mapController: controller.mapController,
-                initialCenter: controller.pickupLocation,
-                polylines: [
-                  MapPolylineHelper.routePolyline(
-                    points: controller.routePoints.toList(),
-                    color: R.theme.secondary,
-                    strokeWidth: 5.0,
-                  ),
-                ],
+                initialCenter: controller.pickupLocation.value,
+                polylines: controller.routePoints.isNotEmpty
+                    ? [
+                        MapPolylineHelper.routePolyline(
+                          points: controller.routePoints,
+                          color: R.theme.secondary,
+                          strokeWidth: 5.0,
+                        ),
+                      ]
+                    : [],
                 markers: [
                   MapMarkerHelper.pickupMarker(
-                    point: controller.pickupLocation,
-                    size: 50,
+                    point: controller.pickupLocation.value,
+                    size: 40,
                     color: Colors.redAccent,
                   ),
-                  MapMarkerHelper.dropoffMarker(
-                    point: controller.dropoffLocation.value,
-                    size: 50,
-                    color: const Color(0xFF27AE60),
-                  ),
+                  if (controller.dropoffLocation.value != null)
+                    MapMarkerHelper.dropoffMarker(
+                      point: controller.dropoffLocation.value!,
+                      size: 40,
+                      color: const Color(0xFF27AE60),
+                    ),
                 ],
               ),
             ),
-
             Positioned(
               top: 0,
               left: 0,
@@ -100,7 +102,6 @@ class PointToPointView extends GetView<PointToPointController> {
                 ),
               ),
             ),
-
             Obx(() {
               double bottomPadding =
                   (screenHeight * controller.sheetHeight.value) + 20;
@@ -111,17 +112,11 @@ class PointToPointView extends GetView<PointToPointController> {
                 child: FloatingActionButton(
                   mini: true,
                   backgroundColor: Colors.white,
-                  onPressed: () {
-                    controller.mapController.move(
-                      controller.pickupLocation,
-                      15,
-                    );
-                  },
+                  onPressed: controller.centerMapOnRoute,
                   child: const Icon(Icons.my_location, color: Colors.black),
                 ),
               );
             }),
-
             DraggableBottomSheet(
               controller: controller.sheetController,
               initialChildSize: 0.55,
@@ -141,9 +136,7 @@ class PointToPointView extends GetView<PointToPointController> {
                       fontFamily: 'Urbanist',
                     ),
                   ),
-
                   18.sbh,
-
                   RouteInputFields(
                     pickupController: controller.pickupInput,
                     dropoffController: controller.dropoffInput,
@@ -152,57 +145,57 @@ class PointToPointView extends GetView<PointToPointController> {
                     pickupColor: Colors.redAccent,
                     dropoffColor: const Color(0xFF27AE60),
                     borderColor: R.theme.secondary,
-                    onPickupTap: () => Get.to(() => SearchView()),
-                    onDropoffTap: () => Get.to(() => SearchView()),
+                    onPickupTap: controller.goToSelectPickup,
+                    onDropoffTap: controller.goToSelectDropoff,
                   ),
-
                   18.sbh,
-
-                  Row(
-                    children: [
-                      _buildChip(
-                        "Home",
-                        Icons.bookmark,
-                        R.theme.secondary,
-                        Colors.white,
-                        () => controller.selectSavedPlace("Home"),
-                      ),
-
-                      12.sbw,
-
-                      _buildChip(
-                        "Office",
-                        Icons.bookmark_border,
-                        Colors.white,
-                        Colors.black,
-                        () => controller.selectSavedPlace("Office"),
-                      ),
-
-                      12.sbw,
-
-                      InkWell(
-                        onTap: () => Get.toNamed(Routes.ADD_LABEL),
-                        borderRadius: BorderRadius.circular(30),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: Obx(
+                      () => ListView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 0),
+                        children: [
+                          ...controller.savedPlaces.map((place) {
+                            final isSelected =
+                                controller.selectedLabel.value == place.name;
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6.0,
+                              ),
+                              child: _buildChip(
+                                place.name,
+                                Icons.bookmark,
+                                isSelected ? R.theme.secondary : Colors.white,
+                                isSelected ? Colors.white : Colors.black,
+                                () => controller.updateDestination(place),
+                              ),
+                            );
+                          }).toList(),
+                          InkWell(
+                            onTap: () => Get.toNamed(Routes.ADD_LABEL),
+                            borderRadius: BorderRadius.circular(30),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.add, color: Colors.black),
+                            ),
                           ),
-                          child: const Icon(Icons.add, color: Colors.black),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-
                   20.sbh,
-
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: controller.confirmRide,
+                      onPressed: controller.goToRideSelection,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: R.theme.secondary,
                         shape: RoundedRectangleBorder(
@@ -220,11 +213,9 @@ class PointToPointView extends GetView<PointToPointController> {
                       ),
                     ),
                   ),
-
                   16.sbh,
-
                   InkWell(
-                    onTap: controller.scheduleRide,
+                    onTap: controller.goToScheduleRide,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       height: 50,
@@ -252,7 +243,6 @@ class PointToPointView extends GetView<PointToPointController> {
                       ),
                     ),
                   ),
-
                   20.sbh,
                 ],
               ),
@@ -270,28 +260,25 @@ class PointToPointView extends GetView<PointToPointController> {
     Color textC,
     VoidCallback onTap,
   ) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          height: 40,
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: textC, size: 18),
-
-              const SizedBox(width: 8),
-
-              Text(
-                label,
-                style: TextStyle(color: textC, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: textC, size: 18),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(color: textC, fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ),
     );

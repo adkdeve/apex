@@ -1,7 +1,10 @@
 import 'package:apex/app/modules/rider/point_to_point/bindings/add_label_binding.dart';
 import 'package:apex/app/modules/rider/point_to_point/bindings/ride_selection_binding.dart';
+import 'package:apex/app/modules/rider/point_to_point/bindings/search_location_binding.dart';
 import 'package:apex/app/modules/rider/point_to_point/views/add_label_view.dart';
 import 'package:apex/app/modules/rider/point_to_point/views/ride_selection_view.dart';
+import 'package:apex/app/modules/rider/point_to_point/views/search_location_view.dart';
+import 'package:apex/app/modules/rider/point_to_point/views/map_picker_view.dart';
 import 'package:get/get.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/forget_password_view.dart';
@@ -99,11 +102,7 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: AuthBinding(),
     ),
-    GetPage(
-        name: _Paths.OTP,
-        page: () => OtpView(),
-        binding: AuthBinding()
-    ),
+    GetPage(name: _Paths.OTP, page: () => OtpView(), binding: AuthBinding()),
     GetPage(
       name: _Paths.MAIN,
       page: () => MainView(),
@@ -186,11 +185,7 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(
-        name: _Paths.HOME,
-        page: () => HomeView(),
-        binding: HomeBinding()
-    ),
+    GetPage(name: _Paths.HOME, page: () => HomeView(), binding: HomeBinding()),
     GetPage(
       name: _Paths.ADD_FUEL_LOG,
       page: () => AddFuelLogView(),
@@ -250,6 +245,16 @@ class AppPages {
       name: _Paths.SCHEDULE_RIDE,
       page: () => const ScheduleRideView(),
       binding: ScheduleRideBinding(),
+    ),
+    GetPage(
+      name: _Paths.SEARCH_LOCATION,
+      page: () => const SearchLocationView(),
+      binding: SearchLocationBinding(),
+    ),
+    GetPage(
+      name: _Paths.MAP_PICKER,
+      page: () => const MapPickerView(),
+      binding: SearchLocationBinding(),
     ),
   ];
 }

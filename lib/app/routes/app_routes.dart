@@ -38,10 +38,13 @@ abstract class Routes {
   static const ACCEPTED_REQUEST = _Paths.ACCEPTED_REQUEST;
   static const DURING_RIDE = _Paths.DURING_RIDE;
   static const SCHEDULE_RIDE = _Paths.SCHEDULE_RIDE;
+  static const SEARCH_LOCATION = _Paths.SEARCH_LOCATION;
+  static const MAP_PICKER = _Paths.MAP_PICKER;
 }
 
 abstract class _Paths {
   _Paths._();
+
   static const ONBOARDING = '/onboarding';
   static const ROLESELECTION = '/role-selection';
   static const LOGIN = '/login';
@@ -77,4 +80,6 @@ abstract class _Paths {
   static const ACCEPTED_REQUEST = '/accepted-request';
   static const DURING_RIDE = '/during-ride';
   static const SCHEDULE_RIDE = '/schedule-ride';
+  static const SEARCH_LOCATION = '/search-location';
+  static const MAP_PICKER = '/map-picker';
 }

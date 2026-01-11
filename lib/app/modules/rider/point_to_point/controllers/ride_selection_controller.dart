@@ -1,4 +1,3 @@
-import 'package:apex/app/modules/rider/drivers_list/views/drivers_list_view.dart';
 import 'package:apex/app/data/models/ride_booking_data.dart';
 import 'package:apex/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
@@ -12,42 +11,20 @@ class RideSelectionController extends GetxController {
       DraggableScrollableController();
 
   // --- STATE ---
-  var sheetHeight = 0.50.obs; // Tracks sheet height for button positioning
-  var selectedVehicleIndex = 0.obs; // 0: Ride A/C, 1: Taxi, 2: Moto
+  var sheetHeight = 0.50.obs;
+  var selectedVehicleIndex = 0.obs;
 
-  // Location data
+  // --- Location & Route Data ---
   var pickupAddress = "Current Location".obs;
   var dropoffAddress = "Destination".obs;
   late LatLng pickupLocation;
   late LatLng dropoffLocation;
-  final List<LatLng> routePoints = [
-    const LatLng(37.7749, -122.4194),
-    const LatLng(37.7755, -122.4180),
-    const LatLng(37.7770, -122.4160),
-    const LatLng(37.7800, -122.4140),
-    const LatLng(37.7849, -122.4094),
-  ];
+  var routePoints = <LatLng>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-
-    // Set default locations
-    pickupLocation = const LatLng(37.7749, -122.4194);
-    dropoffLocation = const LatLng(37.7849, -122.4094);
-
-    // Get data from previous screen if available
-    if (Get.arguments != null && Get.arguments is Map) {
-      final args = Get.arguments as Map;
-      pickupAddress.value = args['pickupAddress'] ?? pickupAddress.value;
-      dropoffAddress.value = args['dropoffAddress'] ?? dropoffAddress.value;
-      if (args['pickupLat'] != null && args['pickupLng'] != null) {
-        pickupLocation = LatLng(args['pickupLat'], args['pickupLng']);
-      }
-      if (args['dropoffLat'] != null && args['dropoffLng'] != null) {
-        dropoffLocation = LatLng(args['dropoffLat'], args['dropoffLng']);
-      }
-    }
+    _loadDataFromArgs();
 
     sheetController.addListener(() {
       sheetHeight.value = sheetController.size;
@@ -60,13 +37,25 @@ class RideSelectionController extends GetxController {
     super.onClose();
   }
 
+  void _loadDataFromArgs() {
+    if (Get.arguments != null && Get.arguments is Map) {
+      final args = Get.arguments as Map;
+      pickupAddress.value = args['pickupAddress'] ?? pickupAddress.value;
+      dropoffAddress.value = args['dropoffAddress'] ?? dropoffAddress.value;
+      pickupLocation = args['pickupLocation'] ?? const LatLng(0, 0);
+      dropoffLocation = args['dropoffLocation'] ?? const LatLng(0, 0);
+      if (args['routePoints'] != null) {
+        routePoints.value = List<LatLng>.from(args['routePoints']);
+      }
+    }
+  }
+
   // --- ACTIONS ---
   void selectVehicle(int index) {
     selectedVehicleIndex.value = index;
   }
 
   void findDriver() {
-    // Create ride booking data
     final bookingData = RideBookingData(
       pickupAddress: pickupAddress.value,
       dropoffAddress: dropoffAddress.value,
@@ -76,12 +65,21 @@ class RideSelectionController extends GetxController {
       dropoffLng: dropoffLocation.longitude,
       rideType: "point-to-point",
       selectedVehicle: getVehicleName(selectedVehicleIndex.value),
-      estimatedFare: "20.00",
-      estimatedTime: "~44min.",
-      estimatedDistance: "8.5 km",
+      estimatedFare: "20.00", // Replace with actual fare calculation
+      estimatedTime: "~44min.", // Replace with actual time
+      estimatedDistance: "8.5 km", // Replace with actual distance
     );
 
     Get.toNamed(Routes.DRIVERS_LIST, arguments: bookingData);
+  }
+
+  void centerMapOnRoute() {
+    mapController.fitCamera(
+      CameraFit.bounds(
+        bounds: LatLngBounds(pickupLocation, dropoffLocation),
+        padding: const EdgeInsets.all(50),
+      ),
+    );
   }
 
   String getVehicleName(int index) {

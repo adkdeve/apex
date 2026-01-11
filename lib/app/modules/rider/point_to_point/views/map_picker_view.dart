@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:apex/common/widgets/maps/map_component.dart';
+import '../../../../../common/widgets/maps/map_component.dart';
 import '../../../../core/core.dart';
-import '../controllers/add_label_controller.dart';
+import '../controllers/search_location_controller.dart';
 
-class MapPickerView extends GetView<AddLabelController> {
+class MapPickerView extends GetView<SearchLocationController> {
   const MapPickerView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Get.put(SearchLocationController());
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -20,25 +20,24 @@ class MapPickerView extends GetView<AddLabelController> {
       child: Scaffold(
         body: Stack(
           children: [
-
             // 1. Map Layer
-            MapComponent(
-              mapController: controller.pickerMapController,
-              initialCenter: const LatLng(37.7749, -122.4194), // Default SF
-              initialZoom: 15.0,
-              onPositionChanged: (pos, hasGesture) {
-                if (hasGesture) {
-                  controller.updatePickedLocation(pos.center!);
-                }
-              },
+            Obx(
+              () => MapComponent(
+                mapController: controller.pickerMapController,
+                initialCenter: controller.tempPickedLocation.value,
+                initialZoom: 15.0,
+                onPositionChanged: (pos, hasGesture) {
+                  if (hasGesture) {
+                    controller.updatePickedLocation(pos.center!);
+                  }
+                },
+              ),
             ),
 
             // 2. Fixed Center Pin
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 40,
-                ),
+                padding: const EdgeInsets.only(bottom: 40),
                 child: Icon(
                   Icons.location_on,
                   color: R.theme.goldAccent,
@@ -78,40 +77,22 @@ class MapPickerView extends GetView<AddLabelController> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-
                     const Text(
-                      "Name this location",
+                      "Set location on map",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
                     ),
-
-                    const SizedBox(height: 10),
-
-                    // Name Input
-                    TextField(
-                      controller: controller.placeNameController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: R.theme.cardBg,
-                        hintText: "e.g. Gym, Mom's House",
-                        hintStyle: const TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-
                     const SizedBox(height: 16),
-
                     SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: controller.confirmPickedLocation,
+                        onPressed: () => Get.back(
+                          result: controller.tempPickedLocation.value,
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: R.theme.goldAccent,
                           shape: RoundedRectangleBorder(
@@ -119,7 +100,7 @@ class MapPickerView extends GetView<AddLabelController> {
                           ),
                         ),
                         child: const Text(
-                          "Save Place",
+                          "Confirm Location",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

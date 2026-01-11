@@ -1,3 +1,4 @@
+import 'package:apex/app/data/models/saved_place_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -19,37 +20,12 @@ class AddLabelView extends GetView<AddLabelController> {
       ),
       child: Scaffold(
         backgroundColor: R.theme.darkBackground,
-        appBar: CustomAppBar(title: 'Add Label'),
+        appBar: CustomAppBar(title: 'Select a Destination'),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-
-                _buildLabelOption(
-                  icon: Icons.home_outlined,
-                  title: "Home",
-                  subtitle: "Set home",
-                  primaryGold: R.theme.secondary,
-                  textWhite: R.theme.white,
-                  textGrey: R.theme.grey,
-                  onTap: () {},
-                ),
-
-                24.sbh,
-
-                _buildLabelOption(
-                  icon: Icons.work_outline,
-                  title: "Work",
-                  subtitle: "Set work",
-                  primaryGold: R.theme.secondary,
-                  textWhite: R.theme.white,
-                  textGrey: R.theme.grey,
-                  onTap: () {},
-                ),
-
-                24.sbh,
-
                 Expanded(
                   child: Obx(
                     () => ListView.separated(
@@ -58,19 +34,28 @@ class AddLabelView extends GetView<AddLabelController> {
                       itemBuilder: (context, index) {
                         final place = controller.savedPlaces[index];
                         return _buildLabelOption(
-                          icon: Icons.place_outlined,
+                          icon: place.isDefault
+                              ? (place.name == 'Home'
+                                    ? Icons.home_outlined
+                                    : Icons.work_outline)
+                              : Icons.location_on_outlined,
                           title: place.name,
                           subtitle: place.address,
                           primaryGold: R.theme.secondary,
                           textWhite: R.theme.white,
                           textGrey: R.theme.grey,
-                          onTap: () {},
+                          onTap: () {
+                            if (place.isDefault) {
+                              controller.selectOrUpdatePlace(place.name);
+                            } else {
+                              controller.selectPlace(place);
+                            }
+                          },
                         );
                       },
                     ),
                   ),
                 ),
-
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -83,7 +68,7 @@ class AddLabelView extends GetView<AddLabelController> {
                       ),
                     ),
                     child: const Text(
-                      "Add a Place",
+                      "Add a New Place",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
